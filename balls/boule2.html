@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>
+        Animation Canvas
+    </title>
+    <style type="text/css">
+        body {
+            color: #ffffff;
+            text-align: center;
+            background: #000000;
+        }
+
+        div {
+            margin: auto;
+            width: 900px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>Animation Canvas</div>
+    <div>
+        <canvas id="myCanvas" width="900" height="700">
+            Votre navigateur n'est pas compatible.
+        </canvas>
+
+    </div>
+    <script type="text/javascript">
+
+        var theCanvas = document.getElementById('myCanvas');
+        var context = theCanvas.getContext('2d');
+        var balls = [];
+
+
+        function creationBackground() {
+            context.fillStyle = "#000000";
+            context.fillRect(0, 0, 900, 700);
+        }
+
+
+
+        function populateBalls(nbBalle) {
+            var colortab = ["#FFC0CB", "#00FA9A", "#4169E1", "#F4A4604","#DA70D6" ,"#F4A4604" ];
+            for (var i = 0; i < nbBalle; i++) {
+                var angle = Math.floor(Math.random() * 360);
+                    var uneBalle = {
+                    x: Math.floor(Math.random() * Math.floor(500)),
+                    y: Math.floor(Math.random() * Math.floor(500)),
+                    color: colortab[Math.floor(Math.random() * 6)],
+                    angle: angle,
+                    velocityX: Math.cos(angle * Math.PI / 180) * 2,
+                    velocityY: Math.sin(angle * Math.PI / 180) * 2
+
+                    };
+                   
+                    balls.push(uneBalle);
+                
+            }
+
+            return  balls;
+        
+                    
+        }
+
+function appartionBalls(){
+    for (let i = 0; i < balls.length ; i ++  ){
+        var b = balls[i]; 
+        dessineUneBalle(b.x,b.y,b.color);
+    }
+
+}
+
+
+function elleBouge(){
+    for (let i = 0 ; i < balls.length ; i++){
+        var b = balls[i];
+        ballequiBouge(b);
+    }
+}
+
+function ballequiBouge(ball){
+    ball.x += ball.velocityX;
+    ball.y += ball.velocityY;
+    if ( ball.x >  myCanvas.width || ball.x  < 0 ) {
+        ball.velocityX  *= -1;
+    }
+    if ( ball.y >  myCanvas.height || ball.y  < 0 ) {
+        ball.velocityY *= -1;
+    }
+}
+
+        function dessineUneBalle(x, y, color) {
+            context.beginPath();
+            context.fillStyle = color;
+            context.arc(x, y, 20, 0, Math.PI * 2);
+            context.fill();
+            context.closePath();
+        };
+
+        function animation(){
+            creationBackground();
+            appartionBalls(); 
+            elleBouge();
+            window.requestAnimationFrame(animation);
+        };
+        populateBalls(100);
+        animation();
+        window.requestAnimationFrame(animation);
+    </script>
+</body>
+
+</html>
